@@ -5,6 +5,8 @@ from tkintertable import TableCanvas
 from tkinter import ttk
 import win32com.client as win32
 
+def callback(*args):
+    print(var.get())
 def receberDemanda():
     outlook = win32.Dispatch('Outlook.Application').GetNamespace('MAPI')
     inbox = outlook.GetDefaultFolder(6)
@@ -24,7 +26,10 @@ dados_dict = dados.to_dict()
 
 janela = tk.Tk()
 janela.title("Astro - Controle de Demanda")
-janela.geometry("1200x600")
+janela.geometry("1000x500")
+var = StringVar()
+var.set("Option 1")
+
 
 barra_menu = tk.Menu(janela)
 janela.config(menu=barra_menu)
@@ -38,7 +43,7 @@ barra_menu.add_cascade(label="Sobre ", menu=sobre_menu)
 arquivo_menu.add_command(label="Abrir")
 arquivo_menu.add_command(label="Salvar")
 
-label = Label(janela, text="Controle de Demanda", font=("Verdana", 16), pady=30)
+label = Label(janela, text="Controle de Demanda", font=("Verdana", 16), pady=10)
 label.pack()
 
 caixa = tk.Frame(janela, bd=2, relief="sunken")
@@ -61,11 +66,17 @@ notebook.pack(fill="both", expand="yes")
 aba1 = ttk.Frame(notebook)
 notebook.add(aba1, text="Enviar e Receber Demandas")
 
-label1 = tk.Label(aba1, text="Conteúdo da aba 1")
-label1.pack()
+btnReceberEmail = tk.Button(aba1, text="Receber Demandas", width=20, height=1, command=receberDemanda)
+btnReceberEmail.pack(side= 'left', padx=20)
 
-btnReceberEmail = tk.Button(aba1, text="Receber Demandas", width=20, height=3, command=receberDemanda)
-btnReceberEmail.pack()
+label2 = Label(aba1, text="Enviar email para: ")
+label2.pack(side="left", padx=50)
+
+option = OptionMenu(aba1, var, "email1", "email 2", "email3", command=callback())
+option.pack(side="left", padx=10)
+
+btnEnviarEmail = tk.Button(aba1, text="Disparar Email", width=20, height=1)
+btnEnviarEmail.pack(side="left", padx=10)
 
 aba2 = ttk.Frame(notebook)
 notebook.add(aba2, text="Gerenciamento de Equipe")
